@@ -1,0 +1,21 @@
+GitHub推送说明
+
+1. 当前推送状态：
+   - 正在等待浏览器身份验证
+   - 请在浏览器中完成GitHub登录
+
+2. 完成推送后：
+   - 检查 https://github.com/liujian546/qingjin-market 是否有文件
+   - 确认所有项目文件都已上传
+
+3. 部署到Heroku：
+   - 双击运行 DEPLOY_TO_HEROKU.bat
+   - 按照提示完成Heroku部署
+
+4. 如果推送卡住：
+   - 检查网络连接
+   - 确保GitHub账户可以正常访问
+   - 可以尝试重新运行 complete_push.ps1 脚本
+
+5. 后续更新：
+   - 修改代码后，只需运行: git add . && git commit -m "update" && git push
