@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center mb-0">支付订单</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>商品信息</h5>
+                    <p><strong>商品名称:</strong> {{ transaction.product.name }}</p>
+                    <p><strong>卖家:</strong> {{ transaction.product.seller.username }}</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>支付金额</h5>
+                    <p><strong>商品价格:</strong> ¥{{ "%.2f"|format(transaction.amount) }}</p>
+                    <p><strong>手续费:</strong> ¥{{ "%.2f"|format(transaction.fee) }}</p>
+                    <p><strong>总计:</strong> <span class="text-primary fs-4">¥{{ "%.2f"|format(transaction.amount + transaction.fee) }}</span></p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">支付方式</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="wechat" value="wechat" checked>
+                            <label class="form-check-label" for="wechat">
+                                <i class="bi bi-wechat text-success me-2"></i>微信支付
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="alipay" value="alipay">
+                            <label class="form-check-label" for="alipay">
+                                <i class="bi bi-alipay text-primary me-2"></i>支付宝
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-wallet2 me-2"></i>立即支付
+                        </button>
+                        <a href="{{ url_for('product_detail', product_id=transaction.product_id) }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>返回商品详情
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}购买商品 - 青衿集{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>购买商品</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        {% if product.image_url %}
+                        <img src="{{ product.image_url }}" class="img-fluid rounded" alt="{{ product.name }}">
+                        {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{ product.name }}</h4>
+                        <p>{{ product.description }}</p>
+                        <p><strong>单价:</strong> ¥{{ "%.2f"|format(product.price) }}</p>
+                        <p><strong>剩余数量:</strong> {{ product.remaining_quantity }} / {{ product.quantity }}</p>
+                        <p><strong>卖家:</strong> {{ product.seller.username }}</p>
+                    </div>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">购买数量</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" 
+                               min="1" max="{{ product.remaining_quantity }}" value="1" required>
+                        <div class="form-text">可购买数量：1-{{ product.remaining_quantity }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">收货地址</label>
+                        <input type="text" class="form-control" id="address" name="address" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="contact_info" class="form-label">联系方式</label>
+                        <input type="text" class="form-control" id="contact_info" name="contact_info" 
+                               placeholder="微信号或手机号" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p><strong>总计:</strong> ¥<span id="total_amount">{{ "%.2f"|format(product.price) }}</span></p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">提交购买请求</button>
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-secondary">取消</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 实时计算总价
+    document.getElementById('quantity').addEventListener('input', function() {
+        const quantity = parseInt(this.value) || 1;
+        const price = parseFloat("{{ product.price }}");
+        const maxQuantity = parseInt("{{ product.remaining_quantity }}");
+        
+        // 确保数量在有效范围内
+        if (quantity < 1) {
+            this.value = 1;
+        } else if (quantity > maxQuantity) {
+            this.value = maxQuantity;
+        }
+        
+        // 计算总价
+        const total = (parseInt(this.value) || 1) * price;
+        document.getElementById('total_amount').textContent = total.toFixed(2);
+    });
+</script>
+{% endblock %}

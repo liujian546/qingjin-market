@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}管理员面板 - 青衿集{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>青衿集管理</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('admin_panel') }}" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-exclamation-triangle me-2"></i>举报管理
+                </a>
+                <a href="{{ url_for('admin_settings') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-gear me-2"></i>平台设置
+                </a>
+                <a href="{{ url_for('fee_test') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-calculator me-2"></i>手续费测试
+                </a>
+                <a href="{{ url_for('user_list') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people me-2"></i>用户管理
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button" role="tab">
+                    待处理举报
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions" type="button" role="tab">
+                    最近交易
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sold-products-tab" data-bs-toggle="tab" data-bs-target="#sold-products" type="button" role="tab">
+                    已售商品历史
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="adminTabsContent">
+            <div class="tab-pane fade show active" id="reports" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>待处理举报</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if reports %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>举报人</th>
+                                            <th>被举报人</th>
+                                            <th>商品</th>
+                                            <th>原因</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for report in reports %}
+                                        <tr>
+                                            <td>{{ report.reporter.username }}<br><small class="text-muted">{{ report.reporter.student_id }}</small></td>
+                                            <td>{{ report.reported_user.username }}<br><small class="text-muted">{{ report.reported_user.student_id }}</small></td>
+                                            <td>{{ report.transaction.product.name }}</td>
+                                            <td>{{ report.reason[:50] }}{% if report.reason|length > 50 %}...{% endif %}</td>
+                                            <td>
+                                                <form method="POST" action="{{ url_for('resolve_report', report_id=report.id) }}" class="d-inline">
+                                                    <input type="hidden" name="action" value="ban">
+                                                    <button type="submit" class="btn btn-danger btn-sm">封禁用户</button>
+                                                </form>
+                                                <form method="POST" action="{{ url_for('resolve_report', report_id=report.id) }}" class="d-inline">
+                                                    <input type="hidden" name="action" value="dismiss">
+                                                    <button type="submit" class="btn btn-secondary btn-sm">忽略</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-check-circle" style="font-size: 3rem; color: #1cc88a;"></i>
+                                <p class="mt-3">暂无待处理举报</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="transactions" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>最近交易</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if transactions %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>商品</th>
+                                            <th>买家</th>
+                                            <th>卖家</th>
+                                            <th>金额</th>
+                                            <th>状态</th>
+                                            <th>时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for transaction in transactions %}
+                                        <tr>
+                                            <td>{{ transaction.product.name }}</td>
+                                            <td>{{ transaction.buyer.username }}<br><small class="text-muted">{{ transaction.buyer.student_id }}</small></td>
+                                            <td>{{ transaction.seller.username }}<br><small class="text-muted">{{ transaction.seller.student_id }}</small></td>
+                                            <td>¥{{ "%.2f"|format(transaction.amount) }}</td>
+                                            <td>
+                                                {% if transaction.status == 'pending' %}
+                                                    <span class="badge bg-warning">待处理</span>
+                                                {% elif transaction.status == 'completed' %}
+                                                    <span class="badge bg-success">已完成</span>
+                                                {% elif transaction.status == 'cancelled' %}
+                                                    <span class="badge bg-secondary">已取消</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ transaction.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-cart-x" style="font-size: 3rem; color: #ddd;"></i>
+                                <p class="mt-3">暂无交易记录</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-pane fade" id="sold-products" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>已售商品历史</h5>
+                    </div>
+                    <div class="card-body">
+                        {% set sold_products = Product.query.filter(Product.status == 'sold').order_by(Product.sold_at.desc()).limit(50).all() %}
+                        {% if sold_products %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>商品名称</th>
+                                            <th>卖家</th>
+                                            <th>买家</th>
+                                            <th>价格</th>
+                                            <th>售出时间</th>
+                                            <th>状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in sold_products %}
+                                        <tr>
+                                            <td>{{ product.name }}</td>
+                                            <td>{{ product.seller.username }}<br><small class="text-muted">{{ product.seller.student_id }}</small></td>
+                                            <td>
+                                                {% if product.buyer %}
+                                                    {{ product.buyer.username }}<br><small class="text-muted">{{ product.buyer.student_id }}</small>
+                                                {% else %}
+                                                    <span class="text-muted">未知</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>¥{{ "%.2f"|format(product.price) }}</td>
+                                            <td>{{ product.sold_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                            <td>
+                                                {% if product.sold_at and product.sold_at < (datetime.utcnow() - timedelta(hours=24)) %}
+                                                    <span class="badge bg-secondary">已过期24小时</span>
+                                                {% else %}
+                                                    <span class="badge bg-success">24小时内</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-cart-x" style="font-size: 3rem; color: #ddd;"></i>
+                                <p class="mt-3">暂无已售商品记录</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{
+  "appName": "CampusMarketplace",
+  "appShortName": "CampusMarket",
+  "appDescription": "校园线上交易平台",
+  "developerName": "Campus Developer",
+  "developerURL": "https://example.com",
+  "backgroundColor": "#ffffff",
+  "themeColor": "#007bff",
+  "icons": {
+    "android-chrome-192x192": "static/icons/android-chrome-192x192.png",
+    "android-chrome-512x512": "static/icons/android-chrome-512x512.png",
+    "apple-touch-icon": "static/icons/apple-touch-icon.png",
+    "favicon-16x16": "static/icons/favicon-16x16.png",
+    "favicon-32x32": "static/icons/favicon-32x32.png",
+    "mstile-150x150": "static/icons/mstile-150x150.png"
+  },
+  "startUrl": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center mb-0">手续费计算测试</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="user_id" class="form-label">用户ID</label>
+                        <input type="number" class="form-control" id="user_id" name="user_id" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">计算手续费</button>
+                    </div>
+                </form>
+                
+                {% if fee is defined %}
+                <div class="alert alert-info mt-4">
+                    <h5>计算结果</h5>
+                    <p>用户ID: {{ user_id }}</p>
+                    <p>已完成交易次数: {{ transaction_count }}</p>
+                    <p>手续费: {{ "%.2f"|format(fee) }} 元</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

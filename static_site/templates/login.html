@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}青衿集 - 登录{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="bi bi-box-arrow-in-right me-2"></i>登录青衿集</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label">学号</label>
+                        <input type="text" class="form-control" id="student_id" name="student_id" required placeholder="请输入您的学号">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="请输入密码">
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>登录
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>还没有账户？<a href="{{ url_for('register') }}">立即注册</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

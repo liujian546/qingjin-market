@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}举报交易 - 青衿集{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="bi bi-exclamation-triangle me-2"></i>举报交易</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <h5><i class="bi bi-info-circle me-2"></i>交易信息</h5>
+                    <p><strong>商品:</strong> {{ transaction.product.name }}</p>
+                    <p><strong>卖家:</strong> {{ transaction.seller.username }} ({{ transaction.seller.student_id }})</p>
+                    <p><strong>买家:</strong> {{ transaction.buyer.username }} ({{ transaction.buyer.student_id }})</p>
+                    <p><strong>交易金额:</strong> ¥{{ "%.2f"|format(transaction.amount) }}</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="reason" class="form-label"><i class="bi bi-chat-square-text me-1"></i>举报原因</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="5" required placeholder="请详细描述举报原因，例如：卖家未按约定时间交易、买家未付款等"></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-arrow-left me-1"></i>返回首页
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-send me-1"></i>提交举报
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{
+  "appName": "CampusMarketplace",
+  "appShortName": "校园交易",
+  "appDescription": "校园线上交易平台",
+  "developerName": "校园开发团队",
+  "developerURL": "https://campus-marketplace.example.com",
+  "backgroundColor": "#4e73df",
+  "themeColor": "#4e73df",
+  "icons": {
+    "android-chrome-192x192": "static/icons/icon-192x192.png",
+    "android-chrome-512x512": "static/icons/icon-512x512.png",
+    "apple-touch-icon": "static/icons/icon-192x192.png",
+    "favicon-16x16": "static/icons/icon-16x16.png",
+    "favicon-32x32": "static/icons/icon-32x32.png",
+    "mstile-150x150": "static/icons/icon-150x150.png"
+  },
+  "startUrl": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "发布商品",
+      "short_name": "发布",
+      "description": "快速发布新商品",
+      "url": "/products/new"
+    },
+    {
+      "name": "我的商品",
+      "short_name": "我的",
+      "description": "查看我发布的商品",
+      "url": "/my-products"
+    }
+  ]
+}

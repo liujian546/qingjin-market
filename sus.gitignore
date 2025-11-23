@@ -1,0 +1,5 @@
+venv/
+__pycache__/
+*.db
+.p4a_config
+.DS_Store

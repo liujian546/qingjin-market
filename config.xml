@@ -1,0 +1,52 @@
+{
+  "id": "campus.marketplace.app",
+  "name": "校园交易平台",
+  "displayName": "Campus Marketplace",
+  "version": "1.0.0",
+  "description": "专为校园打造的安全交易平台",
+  "main": "app.py",
+  "scripts": {
+    "start": "python app.py",
+    "build-android": "cordova build android",
+    "build-ios": "cordova build ios"
+  },
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "permissions": [
+    "INTERNET",
+    "CAMERA",
+    "READ_EXTERNAL_STORAGE",
+    "WRITE_EXTERNAL_STORAGE"
+  ],
+  "icons": {
+    "android": {
+      "ldpi": "static/icons/icon-36x36.png",
+      "mdpi": "static/icons/icon-48x48.png",
+      "hdpi": "static/icons/icon-72x72.png",
+      "xhdpi": "static/icons/icon-96x96.png",
+      "xxhdpi": "static/icons/icon-144x144.png",
+      "xxxhdpi": "static/icons/icon-192x192.png"
+    },
+    "ios": {
+      "20": "static/icons/icon-20x20.png",
+      "29": "static/icons/icon-29x29.png",
+      "40": "static/icons/icon-40x40.png",
+      "58": "static/icons/icon-58x58.png",
+      "60": "static/icons/icon-60x60.png",
+      "76": "static/icons/icon-76x76.png",
+      "80": "static/icons/icon-80x80.png",
+      "87": "static/icons/icon-87x87.png",
+      "120": "static/icons/icon-120x120.png",
+      "152": "static/icons/icon-152x152.png",
+      "167": "static/icons/icon-167x167.png",
+      "180": "static/icons/icon-180x180.png",
+      "1024": "static/icons/icon-1024x1024.png"
+    }
+  },
+  "splash": {
+    "android": "static/splash/splash.png",
+    "ios": "static/splash/splash.png"
+  }
+}

@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - 青衿集{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            {% if product.image_url %}
+            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 400px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                <i class="bi bi-image text-muted" style="font-size: 5rem;"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>价格:</strong> <span class="text-primary fs-4">¥{{ "%.2f"|format(product.price) }}</span></p>
+                        <p><strong>数量:</strong> {{ product.remaining_quantity }} / {{ product.quantity }}</p>
+                        <p><strong>分类:</strong> <span class="badge bg-secondary">{{ product.category.name }}</span></p>
+                        {% if product.meeting_location %}
+                        <p><strong>交易地点:</strong> {{ product.meeting_location }}</p>
+                        {% endif %}
+                        {% if product.meeting_time %}
+                        <p><strong>交易时间:</strong> {{ product.meeting_time }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>卖家:</strong> {{ product.seller.username }}</p>
+                        <p><strong>发布时间:</strong> {{ product.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        {% if product.contact_info %}
+                        <p><strong>联系方式:</strong> {{ product.contact_info }}</p>
+                        {% endif %}
+                        <p><strong>状态:</strong> 
+                            {% if product.status == 'available' %}
+                                <span class="badge bg-success">可购买</span>
+                            {% elif product.status == 'reserved' %}
+                                <span class="badge bg-warning">已预订</span>
+                            {% elif product.status == 'sold' %}
+                                <span class="badge bg-secondary">已售出</span>
+                            {% elif product.status == 'removed' %}
+                                <span class="badge bg-danger">已下架</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                
+                {% if session.user_id != product.seller_id and product.status == 'available' and product.remaining_quantity > 0 %}
+                <a href="{{ url_for('buy_product', product_id=product.id) }}" class="btn btn-success btn-lg w-100">
+                    <i class="bi bi-cart-check me-2"></i>购买
+                </a>
+                {% elif session.user_id != product.seller_id and product.status == 'available' and product.remaining_quantity == 0 %}
+                <button class="btn btn-secondary btn-lg w-100" disabled>已售罄</button>
+                {% endif %}
+                
+                {% if session.user_id == product.seller_id and product.status == 'reserved' %}
+                <div class="mt-3">
+                    <p><strong>买家:</strong> {{ product.buyer.username }}</p>
+                    {% if product.transactions and product.transactions|length > 0 %}
+                    <form method="POST" action="{{ url_for('complete_transaction', transaction_id=product.transactions[0].id) }}">
+                        <button type="submit" class="btn btn-primary w-100" onclick="return confirm('确认线下交易已完成？确认后商品将标记为已售出并在24小时后自动下架。')">
+                            <i class="bi bi-check-circle me-2"></i>确认交易完成
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-1"></i>交易信息异常，请联系管理员
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>操作</h5>
+            </div>
+            <div class="card-body">
+                <!-- 卖家操作 -->
+                {% if session.user_id == product.seller_id %}
+                    {% if product.status == 'available' %}
+                    <form method="POST" action="{{ url_for('remove_product', product_id=product.id) }}" class="d-grid gap-2 mb-2">
+                        <button type="submit" class="btn btn-warning" onclick="return confirm('确定要下架此商品吗？')">
+                            <i class="bi bi-arrow-down-circle me-1"></i>下架商品
+                        </button>
+                    </form>
+                    {% elif product.status == 'removed' %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-info-circle me-1"></i>此商品已下架
+                    </div>
+                    {% endif %}
+                {% endif %}
+                
+                <!-- 管理员操作 -->
+                {% if session.is_admin and product.status != 'removed' %}
+                <form method="POST" action="{{ url_for('admin_remove_product', product_id=product.id) }}" class="d-grid gap-2 mb-2">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('确定要强制下架此商品吗？')">
+                        <i class="bi bi-shield-x me-1"></i>管理员下架
+                    </button>
+                </form>
+                {% endif %}
+                
+                <!-- 举报按钮 -->
+                {% if product.status != 'available' and session.user_id != product.seller_id %}
+                    {% if product.transactions and product.transactions|length > 0 %}
+                    <a href="{{ url_for('new_report', transaction_id=product.transactions[0].id) }}" class="btn btn-danger w-100 mb-2">
+                        <i class="bi bi-exclamation-triangle me-2"></i>举报交易
+                    </a>
+                    {% endif %}
+                {% endif %}
+                
+                <a href="{{ url_for('index') }}" class="btn btn-secondary w-100">
+                    <i class="bi bi-arrow-left me-2"></i>返回首页
+                </a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>卖家信息</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>用户名:</strong> {{ product.seller.username }}</p>
+                <p><strong>学号:</strong> {{ product.seller.student_id }}</p>
+                <p><strong>联系方式:</strong> {{ product.seller.email }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

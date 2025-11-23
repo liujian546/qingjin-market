@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}发布新商品 - 青衿集{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>发布新商品</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">商品名称</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">商品描述</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">价格 (¥)</label>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">数量</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" value="1" required>
+                        <div class="form-text">商品总数量，买方可以购买部分数量</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="category_id" class="form-label">商品分类</label>
+                        <select class="form-select" id="category_id" name="category_id" required>
+                            <option value="">选择分类</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }} - {{ category.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="meeting_location" class="form-label">交易地点</label>
+                        <input type="text" class="form-control" id="meeting_location" name="meeting_location" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="meeting_time" class="form-label">交易时间</label>
+                        <input type="text" class="form-control" id="meeting_time" name="meeting_time" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="contact_info" class="form-label">联系方式</label>
+                        <input type="text" class="form-control" id="contact_info" name="contact_info" placeholder="微信号或QQ号" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image" class="form-label">商品图片</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">发布商品</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">取消</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

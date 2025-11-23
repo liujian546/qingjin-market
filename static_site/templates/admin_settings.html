@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>管理员面板</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('admin_panel') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-exclamation-triangle me-2"></i>举报管理
+                </a>
+                <a href="{{ url_for('admin_settings') }}" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-gear me-2"></i>平台设置
+                </a>
+                <a href="{{ url_for('fee_test') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-calculator me-2"></i>手续费测试
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <h5>平台设置</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">平台名称</label>
+                        <input type="text" class="form-control" value="校园交易平台">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">平台描述</label>
+                        <textarea class="form-control" rows="3">专为校园打造的安全交易平台</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">手续费设置</label>
+                        <div class="card">
+                            <div class="card-body">
+                                <p>默认手续费: 0.10元</p>
+                                <p>交易5次以上: 0.05元</p>
+                                <p>交易10次以上: 0.01元</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">主题颜色</label>
+                        <input type="color" class="form-control form-control-color" value="#4e73df">
+                    </div>
+                    <button type="submit" class="btn btn-primary">保存设置</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

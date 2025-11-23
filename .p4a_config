@@ -1,0 +1,23 @@
+[app]
+name = CampusMarketplace
+version = 1.0.0
+description = 校园线上交易平台
+author = Campus Developer
+author_email = developer@example.com
+
+[build]
+app_dir = .
+main_module = app.py
+requirements = requirements.txt
+
+[android]
+enabled = true
+sdk_version = 30
+ndk_version = 23.1.7779620
+permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
+
+[ios]
+enabled = false
+
+[desktop]
+enabled = true

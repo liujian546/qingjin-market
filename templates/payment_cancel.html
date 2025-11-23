@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>
+                </div>
+                <h2 class="text-danger">支付取消</h2>
+                <p class="lead">您的支付已被取消。</p>
+                <p>您可以重新尝试支付或联系客服。</p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

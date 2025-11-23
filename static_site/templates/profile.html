@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}个人资料 - 青衿集{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h3>个人资料</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <strong>学号:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        {{ current_user.student_id }}
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <strong>用户名:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        {{ current_user.username }}
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <strong>邮箱:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        {{ current_user.email }}
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <strong>注册时间:</strong>
+                    </div>
+                    <div class="col-md-9">
+                        {{ current_user.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    </div>
+                </div>
+                
+                <!-- 修改用户名表单 -->
+                <form method="POST" action="{{ url_for('update_username') }}" class="mt-4">
+                    <div class="mb-3">
+                        <label for="new_username" class="form-label">修改用户名</label>
+                        <input type="text" class="form-control" id="new_username" name="new_username" 
+                               value="{{ current_user.username }}" required>
+                        <div class="form-text">用户名长度应在3-20个字符之间</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">更新用户名</button>
+                </form>
+                
+                <div class="mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
